@@ -41,6 +41,9 @@
  * @author Olle Törnström olle[at]studiomediatech[dot]com
  * @since 2009-01-15
  * @version 1.0.0-ALPHA
+ *
+ * @patch Emil Bengtsson emil0r[at]gmail[dot]com
+ * @added urls and functions functionality
  */
 ;(function($) {
 
@@ -60,16 +63,25 @@
 	$.fn.Slides.defaults = {
 		pause : 6000,
 		fade : 1000
-	};	
+	};
 
 	$.fn.Slides.setup = function(finals, defaults, options) {
 		settings = $.extend({}, finals || {}, defaults || {}, options || {});
 	};		
 	
-	$.fn.Slides.init = function(target, callback) {		
+	$.fn.Slides.init = function(target, callback) {
 		if (typeof settings.images === 'undefined')
 			throw Error('Image array is not optional must be passed in the call $("#id").Slides({images : ["img1.jpg", "img2.jpg"]})');
+		if (typeof settings.urls != 'undefined')
+		    if (settings.urls.length != settings.images.length)
+		        throw Error('Urls length must match images length');
+		if (typeof settings.functions != 'undefined')
+		    if (settings.functions.length != settings.images.length)
+		        throw Error('Functions length must match images length');
 		settings.main = $(target);
+		settings.pipes = new Object();
+		settings.pipes.urls = new Array();
+		settings.pipes.functions = new Array();
 		var isInit = false;
 		var initWrapper = function() {
 			isInit = true;
@@ -100,6 +112,18 @@
 	$.fn.Slides.getNextImage = function() {
 		var nextImage = settings.images.shift();
 		settings.images.push(nextImage);
+		if (settings.urls)
+		{
+		    var url = settings.urls.shift();
+		    settings.urls.push(url);
+		    settings.pipes.urls.push(url);
+		}
+		if (settings.functions)
+		{
+		    var func = settings.functions.shift();
+		    settings.functions.push(func);
+		    settings.pipes.functions.push(func);
+		}
 		return nextImage;	
 	};
 	
@@ -109,11 +133,15 @@
 			if (isToggle) {
 				settings.main.attr('src', settings.nextImage.src).animate({opacity : 1}, settings.fade);
 				isToggle = false;
-			} else {
+			} else {
 				settings.toggle.css({background : 'transparent url(' + settings.nextImage.src + ') left top no-repeat'});
-				settings.main.animate({opacity : 0}, settings.fade);				
+				settings.main.animate({opacity : 0}, settings.fade);
 				isToggle = true;
 			}
+			if (settings.pipes.urls.length > 0)
+                settings.main.click(function(){ window.location.href = settings.pipes.urls.shift(); });
+            if (settings.pipes.functions.length > 0)
+                settings.pipes.functions.shift()();
 			$.fn.Slides.preloadNextImage();
 		}, settings.pause);
 	};
