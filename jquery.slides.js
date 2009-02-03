@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,7 @@
  * <img src="myStartImage.jpg" alt="" id="slideMe" />
  *
  * $('#slideMe').Slides({images : ['image1.jpg', 'image2.jpg']});
- * 
+ *
  * Will rotate over the images in the passed images array.
  *
  * $('#slideMe').Slides({images : [...], pause : 6000, fade : 3000});
@@ -37,7 +37,7 @@
  * transition time to 3s.
  *
  * Default values are 6s and 1s.
- * 
+ *
  * @author Olle Törnström olle[at]studiomediatech[dot]com
  * @since 2009-01-15
  * @version 1.0.0-ALPHA
@@ -67,8 +67,8 @@
 
 	$.fn.Slides.setup = function(finals, defaults, options) {
 		settings = $.extend({}, finals || {}, defaults || {}, options || {});
-	};		
-	
+	};
+
 	$.fn.Slides.init = function(target, callback) {
 		if (typeof settings.images === 'undefined')
 			throw Error('Image array is not optional must be passed in the call $("#id").Slides({images : ["img1.jpg", "img2.jpg"]})');
@@ -87,7 +87,7 @@
 			isInit = true;
 			settings.toggle = settings.main.wrap('<span></span>')
 					.parent()
-					.css({display : 'inline-block', overflow : 'hidden', height : settings.main.height() + 'px', width : settings.main.width() + 'px'});
+					.css({display : 'block', overflow : 'hidden', height : settings.main.height() + 'px', width : settings.main.width() + 'px'});
 			$.fn.Slides.preloadNextImage();
 		};
 		settings.main.load(function() {
@@ -95,7 +95,7 @@
 				return;
 			initWrapper();
 			callback.call();
-		});		
+		});
 		if (settings.main[0].complete && !isInit) {
 			initWrapper();
 			callback.call();
@@ -124,9 +124,9 @@
 		    settings.functions.push(func);
 		    settings.pipes.functions.push(func);
 		}
-		return nextImage;	
+		return nextImage;
 	};
-	
+
 	$.fn.Slides.execute = function() {
 		var isToggle = false;
 		setInterval(function() {
