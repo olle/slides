@@ -1,4 +1,6 @@
 /*
+ * The MIT License
+ * 
  * Copyright (c) 2008-2009 Olle Törnström studiomediatech.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -40,9 +42,9 @@
  *
  * @author Olle Törnström olle[at]studiomediatech[dot]com
  * @since 2009-01-15
- * @version 1.0.0-ALPHA
+ * @version 1.1.0-ALPHA
  *
- * @patch Emil Bengtsson emil0r[at]gmail[dot]com
+ * @author Emil Bengtsson emil0r[at]gmail[dot]com
  * @added urls and functions functionality
  */
 ;(function($) {

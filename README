@@ -1,0 +1,92 @@
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2008-2009 Olle Törnström studiomediatech.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author  Olle Törnström olle[at]studiomediatech[dot]com
+ * @created 2009-03-03
+ * @file    README Slides
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+ INTRODUCTION
+ 
+ Slides is a jQuery plugin that provides a very simple and fully unobtrusive
+ image slideshow, with cross fading effect, to any image element on a web page.
+ 
+ Features:
+
+  - Unobtrusive
+  - Cross fading between images
+  - Configurable cross fade time
+  - Adjustable pause time on each image
+  - Optional linking to URL on click or custom event handler function
+ 
+ QUICK GUIDE
+ 
+ Usage:
+ 
+  Any IMG element can be enabled as a slideshow using Slides. Just find your
+  elements by some selector, for example an ID selector.
+  
+  <img src="images/someimage.jpg" id="slide" />
+  
+  Bind the Slides plugin to the element found by simply calling the plugin with
+  your slideshow configuration passed as a JSON object.
+  
+  jQuery("#slide").Slides({
+  	images : [image1.jpg, image2.jpg, image3.jpg]  
+  });
+ 
+ Optional settings control crossfade time, image pause, link to URL on click or
+ a custom function to be used on image click.
+ 
+  jQuery("#slide").Slides({
+  	images : [image1.jpg, image2.jpg, image3.jpg],
+  	 urls : [link1, link2, link3],
+  	 functions : [fn1, fn2, fn3],
+  	 pause : 12000, //ms 
+  	 fade : 2000,
+  });
+
+ NOTE: When using the urls or functions, urls are always delegated to be handled
+       before any functions, so use one OR the other.
+       
+ DEVELOPMENT
+ 
+ Slides is free, free as in free to use and free to extend. It means that it's 
+ open for anybody to join in and help out or extend on the codebase.
+ 
+ ## Code ##
+ 
+ You can find the Slides code on GitHub:
+ 
+ http://github.com/olle/slides/tree/master
+ 
+ With a public clone URL:
+ 
+ git://github.com/olle/slides.git
+ 
+ ## Bugs ##
+ 
+ Issue handling is prepared and setup in Lighthouse:
+ 
+ http://studiomediatech.lighthouseapp.com/projects/26430-slides
+ 
