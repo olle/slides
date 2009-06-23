@@ -23,27 +23,35 @@
  */
 
 /**
- * Very simple image time based image slideshow.
+ * Very simple automatic image slideshow that degrades nice and is completely
+ * unobtrusive.
  *
- * Simple to use on an image element, for example:
+ * Simple to use, just apply to an image element by some selector:
  *
- * <img src="myStartImage.jpg" alt="" id="slideMe" />
+ * <img src="start-image.jpg" alt="" id="my-image" />
  *
- * $('#slideMe').Slides({images : ['image1.jpg', 'image2.jpg']});
+ * $('#my-image').Slides({images : ['image1.jpg', 'image2.jpg']});
  *
- * Will rotate over the images in the passed images array.
+ * This will create a slideshow that rotates over the images passed in the
+ * array.
  *
- * $('#slideMe').Slides({images : [...], pause : 6000, fade : 3000});
+ * You can also pass some optional settings for a bit of customization:
  *
- * Will set the pause time on each slide to 6s and the fade
- * transition time to 3s.
+ * $('#my-image').Slides({
+ *       images : [...], // required
+ *         wait : 2000,  // optional, default: 0
+ *        pause : 5000,  // optional, default: 6000
+ *         fade : 3000   // optional, default: 1000
+ * });
  *
- * Default values are 6s and 1s.
+ * Passing these settings will create a slideshow that first waits 2s before
+ * starting the slideshow timer. Each image is then displayed 5s and faded with
+ * a transition time of 3s.
  *
- * @author Olle Törnström olle[at]studiomediatech[dot]com
- * @since 2009-01-15
- * @version 1.1.0-ALPHA
- *
+ * @author  Olle Törnström olle[at]studiomediatech[dot]com
+ * @since   2009-01-15
+ * @version 1.2.0-ALPHA
+ * 
  * @author Emil Bengtsson emil0r[at]gmail[dot]com
  * @added urls and functions functionality
  */
@@ -57,12 +65,13 @@
 		var that = this;
 		$.fn.Slides.init(this, function() {
 			return that.each(function() {
-				$(that).Slides.execute();
+				$(that).Slides.start();
 			});
 		});
 	};
 
 	$.fn.Slides.defaults = {
+		wait : 0,
 		pause : 6000,
 		fade : 1000
 	};
@@ -127,6 +136,10 @@
 		    settings.pipes.functions.push(func);
 		}
 		return nextImage;
+	};
+
+	$.fn.Slides.start = function() {
+		setTimeout($.fn.Slides.execute, settings.wait);	
 	};
 
 	$.fn.Slides.execute = function() {
