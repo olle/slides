@@ -24,48 +24,46 @@
 
 /**
  * Very simple automatic image slideshow that degrades nice and is completely
- * unobtrusive.
+ * unobtrusive. Simple to use, just apply to an image element by some selector:
  *
- * Simple to use, just apply to an image element by some selector:
+ *    <img src="start-image.jpg" alt="" id="my-image" />
  *
- * <img src="start-image.jpg" alt="" id="my-image" />
- *
- * $('#my-image').Slides({images : ['image1.jpg', 'image2.jpg']});
+ *    $('#my-image').Slides({images : ['image1.jpg', 'image2.jpg']});
  *
  * This will create a slideshow that rotates over the images passed in the
- * array.
+ * array. You can also pass some optional settings for a bit of customization:
  *
- * You can also pass some optional settings for a bit of customization:
- *
- * $('#my-image').Slides({
- *       images : [...], // required
- *         wait : 2000,  // optional, default: 0
- *        pause : 5000,  // optional, default: 6000
- *         fade : 3000   // optional, default: 1000
- * });
+ *    $('#my-image').Slides({
+ *          images : [...], // required image URL array
+ *            wait : 2000,  // wait before start, default 0
+ *           pause : 5000,  // pause on each image, default 6000
+ *            fade : 3000   // time to fade, default 1000
+ *    });
  *
  * Passing these settings will create a slideshow that first waits 2s before
  * starting the slideshow timer. Each image is then displayed 5s and faded with
  * a transition time of 3s.
  *
  * @author  Olle Törnström olle[at]studiomediatech[dot]com
- * @since   2009-01-15
- * @version 1.2.0-ALPHA
+ * @author  Emil Bengtsson emil0r[at]gmail[dot]com
  * 
- * @author Emil Bengtsson emil0r[at]gmail[dot]com
- * @added urls and functions functionality
+ * @since   2009-01-15
+ * @version 1.3.0-ALPHA
  */
-;(function($) {
+;(function ($) {
 
 	var settings = {};
 
-	$.fn.Slides = function(options) {
-		var finals = {};
-		$.fn.Slides.setup(finals, $.fn.Slides.defaults, options);
+	$.fn.Slides = function (options) {
+		
 		var that = this;
-		$.fn.Slides.init(this, function() {
-			return that.each(function() {
-				$(that).Slides.start();
+		var id = $(this).attr('id');
+		
+		settings[id] = $.extend({}, $.fn.Slides.defaults, options || {});
+		
+		$.fn.Slides.init(that, settings[id], function() {
+			return that.each(function () {
+				$.fn.Slides.start(id);
 			});
 		});
 	};
@@ -76,89 +74,109 @@
 		fade : 1000
 	};
 
-	$.fn.Slides.setup = function(finals, defaults, options) {
-		settings = $.extend({}, finals || {}, defaults || {}, options || {});
-	};
+	$.fn.Slides.init = function (target, settings, callback) {
 
-	$.fn.Slides.init = function(target, callback) {
 		if (typeof settings.images === 'undefined')
 			throw Error('Image array is not optional must be passed in the call $("#id").Slides({images : ["img1.jpg", "img2.jpg"]})');
-		if (typeof settings.urls != 'undefined')
-		    if (settings.urls.length != settings.images.length)
-		        throw Error('Urls length must match images length');
-		if (typeof settings.functions != 'undefined')
-		    if (settings.functions.length != settings.images.length)
-		        throw Error('Functions length must match images length');
-		settings.main = $(target);
-		settings.pipes = new Object();
-		settings.pipes.urls = new Array();
-		settings.pipes.functions = new Array();
-		var isInit = false;
-		var initWrapper = function() {
-			isInit = true;
+			
+		if (typeof settings.urls != 'undefined' && (settings.urls.length != settings.images.length))
+			throw Error('Urls length must match images length');
+		
+		if (typeof settings.functions != 'undefined' && (settings.functions.length != settings.images.length))
+			throw Error('Functions length must match images length');
+
+		settings = $.extend(settings, {
+			main : $(target),
+			pipes : {urls : [], functions : []},
+			initialized : false
+		});
+		
+		var initWrapper = function () {
 			settings.toggle = settings.main.wrap('<span></span>')
 					.parent()
-					.css({display : 'block', overflow : 'hidden', height : settings.main.height() + 'px', width : settings.main.width() + 'px'});
-			$.fn.Slides.preloadNextImage();
+					.css({
+							display : 'block',
+							overflow : 'hidden',
+							height : settings.main.height() + 'px',
+							width : settings.main.width() + 'px'
+					});
+			$.fn.Slides.preloadNextImage(settings);
+			settings.initialized = true;
 		};
-		settings.main.load(function() {
-			if (isInit)
+		
+		settings.main.load(function () {
+			if (settings.initialized)
 				return;
 			initWrapper();
-			callback.call();
+			callback();
 		});
-		if (settings.main[0].complete && !isInit) {
+
+		if (settings.main[0].complete && !settings.initialized) {
 			initWrapper();
-			callback.call();
+			callback();
 		}
 	};
 
-	$.fn.Slides.preloadNextImage = function() {
-		var nextImage = $.fn.Slides.getNextImage();
+	$.fn.Slides.preloadNextImage = function (settings) {
+		var nextImage = $.fn.Slides.getNextImage(settings);
 		var image = new Image();
 		image.src = nextImage;
 		settings.nextImage = image;
 	};
 
-	$.fn.Slides.getNextImage = function() {
+	$.fn.Slides.getNextImage = function (settings) {
 		var nextImage = settings.images.shift();
 		settings.images.push(nextImage);
-		if (settings.urls)
-		{
+
+		if (settings.urls) {
 		    var url = settings.urls.shift();
 		    settings.urls.push(url);
 		    settings.pipes.urls.push(url);
 		}
-		if (settings.functions)
-		{
+		
+		if (settings.functions) {
 		    var func = settings.functions.shift();
 		    settings.functions.push(func);
 		    settings.pipes.functions.push(func);
 		}
+		
 		return nextImage;
 	};
 
-	$.fn.Slides.start = function() {
-		setTimeout($.fn.Slides.execute, settings.wait);	
+	$.fn.Slides.start = function (id) {
+		setTimeout(function () {
+			$.fn.Slides.execute(id);
+		}, settings[id].wait);	
 	};
 
-	$.fn.Slides.execute = function() {
-		var isToggle = false;
-		setInterval(function() {
-			if (isToggle) {
-				settings.main.attr('src', settings.nextImage.src).animate({opacity : 1}, settings.fade);
-				isToggle = false;
+	$.fn.Slides.execute = function (id) {
+
+		var _settings = settings[id];
+		_settings.isToggle = false;
+
+		setInterval(function () {
+			
+			if (_settings.isToggle) {
+				_settings.main.attr('src', _settings.nextImage.src).animate({opacity : 1}, _settings.fade);
+				_settings.isToggle = false;
 			} else {
-				settings.toggle.css({background : 'transparent url(' + settings.nextImage.src + ') left top no-repeat'});
-				settings.main.animate({opacity : 0}, settings.fade);
-				isToggle = true;
+				_settings.toggle.css({background : 'transparent url(' + _settings.nextImage.src + ') left top no-repeat'});
+				_settings.main.animate({opacity : 0}, _settings.fade);
+				_settings.isToggle = true;
 			}
-			if (settings.pipes.urls.length > 0)
-                settings.main.click(function(){ window.location.href = settings.pipes.urls.shift(); });
-            if (settings.pipes.functions.length > 0)
-                settings.pipes.functions.shift()();
-			$.fn.Slides.preloadNextImage();
-		}, settings.pause);
+			
+			if (_settings.pipes.urls.length > 0) {
+                _settings.main.click(function () {
+					window.location.href = _settings.pipes.urls.shift();					
+				});
+			}
+			
+            if (_settings.pipes.functions.length > 0)
+                _settings.pipes.functions.shift()();
+				
+			$.fn.Slides.preloadNextImage(_settings);
+			
+		}, _settings.pause);
 	};
 
 })(jQuery);
