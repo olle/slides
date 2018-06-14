@@ -200,7 +200,7 @@
     }, _settings.pause);
   };
 
-  $('[data-slides]').each(function() {
+  $('img[data-slides]').each(function() {
     var $this = $(this);
     var images = JSON.parse($this.data('slides').replace(/'/g, '\"'));
     var wait = $this.data('wait') || $.fn.Slides.defaults.wait;
