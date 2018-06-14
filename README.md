@@ -45,7 +45,7 @@ be used on image click.
        pause : 12000,
        fade : 2000
     });
- 
+
 REFERENCE
 ---------
 
@@ -53,7 +53,7 @@ REFERENCE
 
     images : Array of images to show in the slideshow. Note that the slideshow
              will not automatically include the static image of the IMG-element.
-            
+
 ### Optional parameters:
 
      wait : Time in ms before slideshow starts, default 0.
@@ -61,31 +61,16 @@ REFERENCE
      fade : Time in ms for the image fade transition, default 3000.
 
 Optional handlers for clicks, paired by order in `images`, either one of:
-   
-         urls : Array of URLs, normal linking 
+
+         urls : Array of URLs, normal linking
     functions : Array of custom functions
-      
+
 DEVELOPMENT
 -----------
 
-Slides is free, free as in free to use and free to extend. It means that it's 
+Slides is free, free as in free to use and free to extend. It means that it's
 open for anybody to join in and help out or extend on the codebase.
-
-### Code ###
-
-You can find the Slides code on Github:
-
-[http://github.com/olle/slides/tree/master]()
-
-### Bugs, Issues or Features Requests ###
-
-Slides can only get better if you provide feedback, report bugs and problems
-or suggest new options, features or changes. Please use the issue handling
-found on Github at:
-
-[http://github.com/olle/slides/issues]()
 
 ### Feedback ###
 
 Anything else, feel free to contact me on olle[at]studiomediatech[dot]com.
- 
