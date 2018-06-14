@@ -15,39 +15,42 @@ Features:
 Slides is different to some other plugins in that it does not require any
 extra HTML elements to define the slideshow.
 
-MINI-MANUAL
+Quick Start
 -----------
 
-### Usage:
+Any image element can be enables as a slideshow automatically using Slides. Just
+add the `data-slides` attribute, and specify the list of image sources to use
+in the slideshow.
 
-Any IMG element can be enabled as a slideshow using Slides. Just find your
-elements by some selector, for example an ID or CLASS selector. In this
-example we use the ID.
+    <img src="dog.jpg" data-slides="['cat.jpg', 'fish.jpg', 'frog.jpg']" />
 
-    <img src="images/someimage.jpg" id="slide" />
+The presence of the data attribute will trigger the slideshow to begin. A few
+simple properties makes it easy to control the slideshow.
 
-Bind the Slides plugin to the element found by simply calling the plugin with
-your slideshow configuration passed as a JSON object.
+    data-wait="6000"   // Time in ms before slideshow starts, default is 0.
+    data-pause="12000" // Time in ms that each image is showed, default 6000.
+    data-fade="3000"   // Time in ms for the fade transition, default 3000.
 
-    $("#slide").Slides({
-       images : [image1.jpg, image2.jpg, image3.jpg]  
-    });
+### With JS/jQuery
 
-Optional settings control initial wait time before starting, crossfade or fade
+Slides can also be used as a traditional jQuery plug-in. An image element can
+simply be targetted using some selector.
+
+    <img src="burger.jpg" id="foods" />
+
+In our JS we select the image element by it's ID attribute. The optional
+settings can configure the initial wait time before starting, crossfade or fade
 time, image pause or time showed, link to URL on click or a custom function to
 be used on image click.
 
-    $("#slide").Slides({
-       images : [image1.jpg, image2.jpg, image3.jpg],
+    $("#foods").Slides({
+       images : ['salad.jpg', 'steak.jpg', 'soup.jpg'],
        urls : [link1, link2, link3],
        functions : [fn1, fn2, fn3],
        wait : 0,
        pause : 12000,
        fade : 2000
     });
-
-REFERENCE
----------
 
 ### Required parameters:
 
@@ -71,6 +74,6 @@ DEVELOPMENT
 Slides is free, free as in free to use and free to extend. It means that it's
 open for anybody to join in and help out or extend on the codebase.
 
-### Feedback ###
+### Feedback
 
 Anything else, feel free to contact me on olle[at]studiomediatech[dot]com.
